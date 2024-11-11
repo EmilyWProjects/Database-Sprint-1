@@ -1,0 +1,18 @@
+Normalization Explanation:
+
+
+For all tables:
+
+-All table cells hold a single value (1NF)
+
+-All values are unique, with the Rentals table only referencing other tables using foreign keys and all tables have a primary key (1NF)
+
+-All data types in the tables are consistent (1NF)
+
+-All tables have no partial dependencies by using a primary key in each (2NF)
+
+-All table attributes are dependent on one key only and have no other dependencies (3NF)
+
+
+All tables in the database meet 3NF criteria listed above, which includes meeting all 1NF and 2NF criteria. 
+This removes redundant data and features, and ensures integrity of the database.
