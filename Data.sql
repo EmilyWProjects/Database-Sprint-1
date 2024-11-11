@@ -54,3 +54,39 @@ INSERT INTO Rentals (customer_id, movie_id, rentals_rentdate, rentals_returndate
 (4, 5, '2020-08-01', '2020-08-20'),
 (5, 2, '2020-09-01', NULL),
 (5, 5, '2020-10-01', '2020-10-20')
+
+
+--Customer email query
+SELECT Movies.movie_title
+FROM Rentals  
+JOIN Customers ON Rentals.customer_id = Customers.customer_id
+JOIN Movies ON Rentals.movie_id = Movies.movie_id
+WHERE Customers.customer_email = $1;
+
+--Customer movie title query
+SELECT Customers.customer_fname, Customers.customer_lname
+FROM Rentals 
+JOIN Customers ON Rentals.customer_id = Customers.customer_id
+JOIN Movies ON Rentals.movie_id = Movies.movie_id
+WHERE Movies.movie_title = $1;
+
+--Movie rental history query
+SELECT Customers.customer_fname, Customers.customer_lname, Rentals.rentals_rentdate, Rentals.rentals_returndate
+FROM Rentals
+JOIN Customers ON Rentals.customer_id = Customers.customer_id
+JOIN Movies ON Rentals.movie_id = Movies.movie_id
+WHERE Movies.movie_title = $1
+
+--Movie rental director query
+SELECT Customers.customer_fname, Customers.customer_lname, Rentals.rentals_rentdate, Movies.movie_title
+FROM Rentals
+JOIN Customers ON Rentals.customer_id = Customers.customer_id
+JOIN Movies ON Rentals.movie_id = Movies.movie_id
+WHERE Movies.movie_director = $1
+
+--Null value query
+SELECT Movies.movie_title, Rentals.rentals_rentdate, Customers.customer_fname, Customers.customer_lname
+FROM Rentals
+JOIN Customers ON Rentals.customer_id = Customers.customer_id
+JOIN Movies ON Rentals.movie_id = Movies.movie_id
+WHERE Rentals.rentals_returndate IS NULL
