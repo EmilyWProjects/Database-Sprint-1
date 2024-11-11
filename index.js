@@ -9,11 +9,41 @@ const pool = new Pool({
   port: 5432,
 });
 
-/**
- * Creates the database tables, if they do not already exist.
- */
+//Create Movies, Customers, and Rentals tables in a step-by-step process
 async function createTable() {
-  // TODO: Add code to create Movies, Customers, and Rentals tables
+
+  //Movies
+  await pool.query (`
+    CREATE TABLE IF NOT EXISTS Movies (
+    movie_id SERIAL PRIMARY KEY,
+    movie_title VARCHAR(255) NOT NULL,
+    movie_year INT,
+    movie_genre VARCHAR(255),
+    movie_director VARCHAR(255)
+   )`
+  )
+  
+  //Customers
+  await pool.query (`
+    CREATE TABLE IF NOT EXISTS Customers (
+    customer_id SERIAL PRIMARY KEY,
+    customer_fname VARCHAR(255),
+    customer_lname VARCHAR(255),
+    customer_email VARCHAR(255) UNIQUE NOT NULL,
+    customer_phone TEXT
+    )`
+  )
+
+  //Rentals
+  await pool.query (`
+    CREATE TABLE IF NOT EXISTS Rentals (
+    rental_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES Customers(customer_id),
+    movie_id INT REFERENCES Movies(movie_id),
+    rentals_rentdate DATE NOT NULL,
+    rentals_returndate DATE,
+    )`
+  )
 };
 
 /**
@@ -25,14 +55,19 @@ async function createTable() {
  * @param {string} director Director of the movie
  */
 async function insertMovie(title, year, genre, director) {
-  // TODO: Add code to insert a new movie into the Movies table
+  await pool.query(
+    "INSERT INTO Movies (movie_title, movie_year, movie_genre, movie_director) VALUES ($1, $2, $3, $4)",
+    [title, year, genre, director]
+  );
+  console.log(`"${title}" has been added.`);
 };
 
 /**
  * Prints all movies in the database to the console
  */
 async function displayMovies() {
-  // TODO: Add code to retrieve and print all movies from the Movies table
+  const display = await pool.query("SELECT * FROM Movies");
+  console.table(display.rows);
 };
 
 /**
@@ -42,7 +77,11 @@ async function displayMovies() {
  * @param {string} newEmail New email address of the customer
  */
 async function updateCustomerEmail(customerId, newEmail) {
-  // TODO: Add code to update a customer's email address
+  await pool.query(
+    "UPDATE Customers SET email_address = $1 WHERE customer_id = $2", 
+    [newEmail, customerId]
+  );
+  console.log(`${newEmail} has been set.`);
 };
 
 /**
@@ -51,7 +90,11 @@ async function updateCustomerEmail(customerId, newEmail) {
  * @param {number} customerId ID of the customer to remove
  */
 async function removeCustomer(customerId) {
-  // TODO: Add code to remove a customer and their rental history
+  await pool.query(
+    "DELETE FROM Customers WHERE customer_id = $1", 
+    [customerId]
+  );
+  console.log(`${customerId} has been deleted.`);
 };
 
 /**
