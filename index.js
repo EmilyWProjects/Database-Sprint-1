@@ -1,11 +1,11 @@
 const { Pool } = require('pg');
 
-// PostgreSQL connection
+//PostgreSQL connection
 const pool = new Pool({
-  user: 'postgres', //This _should_ be your username, as it's the default one Postgres uses
+  user: 'postgres', 
   host: 'localhost',
-  database: 'your_database_name', //This should be changed to reflect your actual database
-  password: 'your_database_password', //This should be changed to reflect the password you used when setting up Postgres
+  database: 'DatabaseSprintOne', 
+  password: 'PostgresPassword', 
   port: 5432,
 });
 
